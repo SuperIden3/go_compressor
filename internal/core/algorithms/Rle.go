@@ -9,10 +9,10 @@ import (
 // FIX: Now accepts a pointer to bytes.Buffer.
 func writePair(buffer *bytes.Buffer, c byte, char byte) error {
 	// We ignore 'n' (number of bytes written) because we know WriteByte always writes 1 byte on success.
-	if _, err := buffer.WriteByte(c); err != nil {
+	if err := buffer.WriteByte(c); err != nil {
 		return fmt.Errorf("failed to write count byte: %w", err)
 	}
-	if _, err := buffer.WriteByte(char); err != nil {
+	if err := buffer.WriteByte(char); err != nil {
 		return fmt.Errorf("failed to write data byte: %w", err)
 	}
 	return nil
@@ -20,7 +20,7 @@ func writePair(buffer *bytes.Buffer, c byte, char byte) error {
 
 // Encodes data using the RLE compression method, returning a byte slice.
 // FIX: Changed return type from (string, error) to ([]byte, error) for correct handling of binary data.
-func rle(data string) ([]byte, error) {
+func Rle(data string) ([]byte, error) {
 	DATA_LEN := len(data)
 
 	if DATA_LEN == 0 {
@@ -55,8 +55,8 @@ func rle(data string) ([]byte, error) {
 }
 
 // If you MUST return a string, you can convert the byte slice to a string:
-func rleAsString(data string) (string, error) {
-    compressedBytes, err := rle(data) // Use the fixed RLE function
+func RleAsString(data string) (string, error) {
+    compressedBytes, err := Rle(data) // Use the fixed RLE function
     if err != nil {
         return "", err
     }
