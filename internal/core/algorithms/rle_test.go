@@ -37,7 +37,7 @@ func TestRle(t *testing.T) {
 	// 2. Run the tests
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Rle(tt.input)
+			got, err := RleAsString(tt.input)
 
 			// Check for unexpected errors
 			if err != nil {
@@ -45,7 +45,7 @@ func TestRle(t *testing.T) {
 			}
 
 			// Compare slices using bytes.Equal
-			if !bytes.Equal(got, tt.expected) {
+			if !bytes.Equal([]byte(got), tt.expected) {
 				t.Errorf("Rle(%q) = %v, want %v", tt.input, got, tt.expected)
 			}
 		})

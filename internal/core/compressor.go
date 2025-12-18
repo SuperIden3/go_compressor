@@ -2,28 +2,24 @@ package core
 
 import "github.com/superiden3/go_compress/internal/core/algorithms"
 
-type ErrUnsupportedAlgorithmType struct {
+type ErrUnsupportedAlgorithmType struct { // Custom error for unsupported algorithms
 	Algorithm string
 }
 
-func (e *ErrUnsupportedAlgorithmType) Error() string {
+func (e *ErrUnsupportedAlgorithmType) Error() string { // Format error message
 	return "unsupported compression algorithm: " + e.Algorithm
 }
 
-type Compressor interface {
+type Compressor interface { // Common interface for compressors
 	Compress(data []byte) ([]byte, error)
 	Decompress(data []byte) ([]byte, error)
 }
 
-func NewCompressor(algorithm string) (Compressor, error) {
+func NewCompressor(algorithm string) (Compressor, error) { // Factory function for compressors
 	switch algorithm {
-		case "gzip":
-			return algorithms.NewGzipCompressor(), nil
-		case "zlib":
-			return algorithms.NewZlibCompressor(), nil
-		case "lz4":
-			return algorithms.NewLz4Compressor(), nil
-		default:
-			return nil, &ErrUnsupportedAlgorithmType{Algorithm: algorithm}
+	case algorithms.RLEAlgorithm:
+		return algorithms.NewRLECompressor(), nil
+	default:
+		return nil, &ErrUnsupportedAlgorithmType{Algorithm: algorithm}
 	}
 }
