@@ -3,6 +3,7 @@ package algorithms
 import (
 	"bytes"
 	"fmt"
+	"os"
 )
 
 // --- // RLE Encoding
@@ -36,7 +37,7 @@ func Rle(data []byte) ([]byte, error) {
 	// due to the use of byte(count).
 
 	for i := 1; i < DATA_LEN; i++ { // Head start at index 1 to compare the byte behind the current byte
-		if data[i] == data[i - 1] {
+		if data[i] == data[i - 1] && count < 255 { // If the current byte is the same as the previous one and the count is less than 255
 			count++ // Pattern found
 		} else {
 			// FIX: Pass the address of the buffer (&buffer) to the helper function.
@@ -135,6 +136,81 @@ func (r *RLECompressor) Decompress(data []byte) ([]byte, error) {
 	return decompressedData, nil
 }
 
+// Factory functions for creating instances of RLECompressor.
 func NewRLECompressor() *RLECompressor {
-	return &RLECompressor{}
+	return &RLECompressor {}
+}
+
+// Factory function for creating a decompressor instance.
+func NewRLEDecompressor() *RLECompressor {
+	return &RLECompressor {}
+}
+
+// --- // File To File Compressing and Decompressing
+
+// RleCompressFile compresses a file and writes the result to another file.
+func RleCompressFile(inputFilePath string, outputFilePath string) error {
+	// Read the input file content.
+	inputData, err := os.ReadFile(inputFilePath)
+	if err != nil {
+		return fmt.Errorf("failed to read input file: %w", err)
+	}
+
+	// Compress the data.
+	compressedData, err := Rle(inputData)
+	if err != nil {
+		return fmt.Errorf("failed to compress data: %w", err)
+	}
+
+	// Write the compressed data to the output file.
+	if err := os.WriteFile(outputFilePath, compressedData, 0644); err != nil {
+		return fmt.Errorf("failed to write output file: %w", err)
+	}
+
+	return nil
+}
+
+// RleDecompressFile decompresses a file and writes the result to another file.
+func RleDecompressFile(inputFilePath string, outputFilePath string) error {
+	// Read the input file content.
+	inputData, err := os.ReadFile(inputFilePath)
+	if err != nil {
+		return fmt.Errorf("failed to read input file: %w", err)
+	}
+
+	// Decompress the data.
+	decompressedData, err := RleDecode(inputData)
+	if err != nil {
+		return fmt.Errorf("failed to decompress data: %w", err)
+	}
+
+	// Write the decompressed data to the output file.
+	if err := os.WriteFile(outputFilePath, decompressedData, 0644); err != nil {
+		return fmt.Errorf("failed to write output file: %w", err)
+	}
+
+	return nil
+}
+
+type RLEFileToFileCompressor struct {}
+type RLEFileToFileDecompressor struct {}
+
+// CompressFile implements core.FileToFileCompressor.
+func (r *RLEFileToFileCompressor) CompressFileToFile(inputFilePath string, outputFilePath string) error {
+	return RleCompressFile(inputFilePath, outputFilePath)
+}
+
+// DecompressFile implements core.FileToFileDecompressor.
+func (r *RLEFileToFileDecompressor) DecompressFileToFile(inputFilePath string, outputFilePath string) error {
+	return RleDecompressFile(inputFilePath, outputFilePath)
+}
+
+// Factory functions for creating instances of RLEFileToFileCompressor.
+func NewRLEFileToFileCompressor() *RLEFileToFileCompressor {
+	return &RLEFileToFileCompressor {}
+}
+
+// Factory function for creating a decompressor instance.
+func NewRLEFileToFileDecompressor() *RLEFileToFileDecompressor {
+	return &RLEFileToFileDecompressor {}
 }
