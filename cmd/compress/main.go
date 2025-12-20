@@ -101,11 +101,17 @@ func mainDecompress(alg_int int, wg *sync.WaitGroup) {
 	wg.Wait()
 }
 
+// Enable verbose logging
+func enableVerbose() {
+	algorithms.RleVerbose = true
+}
+
 func main() {
 	// Parse command-line arguments
 	print_algs := flag.Bool("print-algorithms", false, "Print available compression algorithms and exit")
 	alg := flag.String("algorithm", "rle", "Compression algorithm to use (default: rle)")
 	decompress := flag.Bool("decompress", false, "Decompress the input file instead of compressing it")
+	verbose := flag.Bool("verbose", false, "Enable verbose logging")
 	flag.Usage = usage
 	flag.Parse()
 
@@ -132,6 +138,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "Error: Unknown algorithm '%s'\n", *alg)
 			return
 		}
+	}
+
+	// Enable verbose logging if requested
+	if *verbose {
+		enableVerbose()
 	}
 
 	// Create a new WaitGroup to manage goroutines
