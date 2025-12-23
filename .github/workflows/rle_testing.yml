@@ -25,3 +25,37 @@ jobs:
           cd internal/core/algorithms
           echo cd
           go test -v
+  
+  file_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Change Directory
+        run: |
+          cd cmd/compress
+          echo cd
+
+      - name: Make File
+        run: |
+          touch test.txt
+          echo "This is a test file" >> test1.txt
+          echo "Amarillo" >> test2.txt
+          echo "Bananita" >> test3.txt
+          echo "Abba" >> test4.txt
+
+      - name: Run File Test
+        run: |
+          go run main.go test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
+      
+      - name: Compare Files
+        run: |
+          diff test1.txt test1.bin
+          diff test2.txt test2.bin
+          diff test3.txt test3.bin
+          diff test4.txt test4.bin
+      
+      - name: Clean Up
+        run: |
+          rm test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
+
