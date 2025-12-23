@@ -31,13 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Change Directory
-        run: |
-          cd cmd/compress
-          echo cd
-
       - name: Make File
         run: |
+          cd cmd/compress
           touch test.txt
           echo "This is a test file" >> test1.txt
           echo "Amarillo" >> test2.txt
@@ -46,10 +42,12 @@ jobs:
 
       - name: Run File Test
         run: |
+          cd cmd/compress
           go run main.go test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
       
       - name: Compare Files
         run: |
+          cd cmd/compress
           diff test1.txt test1.bin
           diff test2.txt test2.bin
           diff test3.txt test3.bin
@@ -57,5 +55,6 @@ jobs:
       
       - name: Clean Up
         run: |
+          cd cmd/compress
           rm test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
 
