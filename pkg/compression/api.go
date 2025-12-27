@@ -1,3 +1,6 @@
+// Package compression provides an API for compressing and decompressing data using various algorithms.
+// As you can see, this package is a wrapper for the core package, which contains the actual implementation.
+
 package compression
 
 import (

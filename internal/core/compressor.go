@@ -1,3 +1,6 @@
+// Package core contains common interfaces for compressors and decompressors, along with helper functions for creating instances of these interfaces.
+// There are also compressors and decompressors for file-to-file operations, meant for compressing and decompressing files of course.
+
 package core
 
 import "github.com/superiden3/go_compress/internal/core/algorithms"
@@ -22,14 +25,26 @@ type Decompressor interface {
 	Decompress(data []byte) ([]byte, error)
 }
 
-// Interfaces for file-to-file operations
+// Interface for file-to-file operations
 type FileToFileCompressor interface {
 	CompressFileToFile(inputPath, outputPath string) error
 }
 
-// Interfaces for file-to-file decompression operations
+// Interface for file-to-file decompression operations
 type FileToFileDecompressor interface {
 	DecompressFileToFile(inputPath, outputPath string) error
+}
+
+// Interface for just general compressors, having both Compressor and FileToFileCompressor methods
+type GeneralCompressor interface {
+	Compressor
+	FileToFileCompressor
+}
+
+// Interface for just general decompressors, having both Decompressor and FileToFileDecompressor methods
+type GeneralDecompressor interface {
+	Decompressor
+	FileToFileDecompressor
 }
 
 // NewCompressor creates a new Compressor based on the specified algorithm type, which is an int meant for the `Algorithms` array in `implemented.go`.

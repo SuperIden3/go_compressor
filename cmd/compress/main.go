@@ -19,9 +19,14 @@ func usage() {
 
 // Main compressing function for `main` to use.
 func mainCompress(alg_int int, wg *sync.WaitGroup) {
+	// Checking for invalid arguments
+	if alg_int < 0 || alg_int >= len(algorithms.Algorithms)  {
+		fmt.Fprintf(os.Stderr, "Error: Unknown algorithm number %d\n", alg_int)
+		return
+	}
+
 	// Create a new compressor with the selected algorithm
-	compressor, err := core.NewFileToFileCompressor(alg_int)
-	// Create a new compressor with the selected algorithm
+	compressor, err := core.NewFileToFileCompressor(alg_int) // Create a new compressor with the selected algorithm
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: Failed to create compressor: %v\n", err)
 		return
@@ -36,8 +41,8 @@ func mainCompress(alg_int int, wg *sync.WaitGroup) {
 		// Check if the input file exists
 		_, err := os.Stat(inputFile)
 		if os.IsNotExist(err) {
-			fmt.Fprintf(os.Stderr, "Error: Input file '%s' does not exist\n", inputFile)
-			return
+			fmt.Fprintf(os.Stderr, "Error: Input file \"%s\" does not exist\n", inputFile)
+			continue
 		}
 
 		// Increment the WaitGroup counter
@@ -50,7 +55,7 @@ func mainCompress(alg_int int, wg *sync.WaitGroup) {
 			// Compress the file
 			err := compressor.CompressFileToFile(inputFile, outputFile)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "Error: Failed to compress file '%s': %v\n", inputFile, err)
+				fmt.Fprintf(os.Stderr, "Error: Failed to compress file \"%s\": %v\n", inputFile, err)
 			}
 		}(inputFile, outputFile)
 	}
@@ -61,9 +66,14 @@ func mainCompress(alg_int int, wg *sync.WaitGroup) {
 
 // Main decompressing function for `main` to use.
 func mainDecompress(alg_int int, wg *sync.WaitGroup) {
+	// Checking for invalid arguments
+	if alg_int < 0 || alg_int >= len(algorithms.Algorithms)  {
+		fmt.Fprintf(os.Stderr, "Error: Unknown algorithm number %d\n", alg_int)
+		return
+	}
+
 	// Create a new decompressor with the selected algorithm
 	decompressor, err := core.NewFileToFileDecompressor(alg_int)
-
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: Failed to create decompressor: %v\n", err)
 		return
@@ -102,8 +112,13 @@ func mainDecompress(alg_int int, wg *sync.WaitGroup) {
 }
 
 // Enable verbose logging
-func enableVerbose() {
-	algorithms.RleVerbose = true
+func verbosify(makeVerbose bool) {
+	algorithms.RleVerbose = makeVerbose
+}
+
+// Make logging quiet
+func quietify(makeQuiet bool) {
+	algorithms.RleQuiet = makeQuiet
 }
 
 func main() {
@@ -112,6 +127,7 @@ func main() {
 	alg := flag.String("algorithm", "rle", "Compression algorithm to use (default: rle)")
 	decompress := flag.Bool("decompress", false, "Decompress the input file instead of compressing it")
 	verbose := flag.Bool("verbose", false, "Enable verbose logging")
+	quiet := flag.Bool("quiet", false, "Disable logging (overrides verbose)")
 	flag.Usage = usage
 	flag.Parse()
 
@@ -140,9 +156,12 @@ func main() {
 		}
 	}
 
-	// Enable verbose logging if requested
-	if *verbose {
-		enableVerbose()
+	// Enable quiet logging if requested (overrides verbose)
+	if *quiet {
+		quietify(true)
+	} else {
+		// Enable verbose logging if requested
+		verbosify(*verbose)
 	}
 
 	// Create a new WaitGroup to manage goroutines

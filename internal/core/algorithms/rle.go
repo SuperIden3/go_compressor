@@ -8,8 +8,11 @@ import (
 
 // Functions for logging
 
+var RleQuiet = false
 func generalPrintf(format string, v ...interface{}) {
-	fmt.Printf("RLE: " + format, v...)
+	if !RleQuiet {
+		fmt.Printf("Rle: " + format, v...)
+	}
 }
 
 var RleVerbose = false

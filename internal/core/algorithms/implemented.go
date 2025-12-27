@@ -3,6 +3,7 @@ package algorithms
 import "fmt"
 
 var Algorithms = []string{ "rle" } // List of names of available (implemented) compression algorithms
+var ImplementedAlgorithms = len(Algorithms) // Number of implemented algorithms
 
 const ( // Constant integers for each algorithm; each one is aligned with its name in the Algorithms array
 	RLEAlgorithm = iota // Run-Length Encoding
