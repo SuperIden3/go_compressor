@@ -1,0 +1,59 @@
+name: RLE Testing
+
+on:
+  push:
+    branches: [ "main", "feat/*" ]
+  pull_request:
+    branches: [ "main", "feat/*" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  go_test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Go Test
+        run: |
+          cd internal/core/algorithms
+          echo cd
+          go test -v
+  
+  file_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make File
+        run: |
+          cd cmd/compress
+          echo "This is a test file" > test1.txt
+          echo "Amarillo" > test2.txt
+          echo "Bananita" > test3.txt
+          echo "Abba" > test4.txt
+
+      - name: Run File Test
+        run: |
+          cd cmd/compress
+          go run main.go -verbose test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
+      
+      - name: Compare Files
+        run: |
+          cd cmd/compress
+          diff test1.txt test1.bin || true
+          diff test2.txt test2.bin || true
+          diff test3.txt test3.bin || true
+          diff test4.txt test4.bin || true
+      
+      - name: Clean Up
+        run: |
+          cd cmd/compress
+          rm test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
+
