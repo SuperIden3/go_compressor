@@ -42,7 +42,7 @@ jobs:
       - name: Run File Test
         run: |
           cd cmd/compress
-          go run main.go test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
+          go run main.go -verbose test1.txt test1.bin test2.txt test2.bin test3.txt test3.bin test4.txt test4.bin
       
       - name: Compare Files
         run: |
