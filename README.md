@@ -1,4 +1,4 @@
-# Go Compress
+# Go Compress v1.0.0
 
 A Go utility program that <strong style="text-decoration: underline"><em>compresses</em> and <em>decompresses</em> files</strong>.
 
