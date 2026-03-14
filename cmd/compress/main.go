@@ -20,7 +20,7 @@ func usage() {
 // Main compressing function for `main` to use.
 func mainCompress(alg_int int, wg *sync.WaitGroup) {
 	// Checking for invalid arguments
-	if alg_int < 0 || alg_int >= len(algorithms.Algorithms)  {
+	if alg_int < 0 || alg_int >= algorithms.ImplementedAlgorithms {
 		fmt.Fprintf(os.Stderr, "Error: Unknown algorithm number %d\n", alg_int)
 		return
 	}
@@ -114,11 +114,13 @@ func mainDecompress(alg_int int, wg *sync.WaitGroup) {
 // Enable verbose logging
 func verbosify(makeVerbose bool) {
 	algorithms.RleVerbose = makeVerbose
+	algorithms.HuffmanVerbose = makeVerbose
 }
 
 // Make logging quiet
 func quietify(makeQuiet bool) {
 	algorithms.RleQuiet = makeQuiet
+	algorithms.HuffmanQuiet = makeQuiet
 }
 
 func main() {
@@ -145,33 +147,30 @@ func main() {
 
 	// Validate the selected algorithm
 	alg_int := -1
-	for i := 0; i < len(algorithms.Algorithms); i++ {
+	for i := 0; i < algorithms.ImplementedAlgorithms; i++ {
 		if algorithms.Algorithms[i] == *alg {
 			alg_int = i
 			break
 		}
-		if i == len(algorithms.Algorithms)-1 {
+		if i == algorithms.ImplementedAlgorithms - 1 {
 			fmt.Fprintf(os.Stderr, "Error: Unknown algorithm '%s'\n", *alg)
 			return
 		}
 	}
 
 	// Enable quiet logging if requested (overrides verbose)
-	if *quiet {
-		quietify(true)
-	} else {
-		// Enable verbose logging if requested
-		verbosify(*verbose)
-	}
+	quietify(*quiet)
+	// Enable verbose logging if requested
+	verbosify(*verbose)
 
 	// Create a new WaitGroup to manage goroutines
-	wg := &sync.WaitGroup{}
+	var wg sync.WaitGroup
 
 	if !*decompress {
 		// Compress the files
-		mainCompress(alg_int, wg)
+		mainCompress(alg_int, &wg)
 	} else {
 		// Decompress the files
-		mainDecompress(alg_int, wg)
+		mainDecompress(alg_int, &wg)
 	}
 }

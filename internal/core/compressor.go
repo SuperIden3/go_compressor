@@ -11,7 +11,7 @@ type ErrUnsupportedAlgorithmType struct {
 }
 
 // Format the ErrUnsupportedAlgorithmType error message.
-func (e *ErrUnsupportedAlgorithmType) Error() string {
+func (e *ErrUnsupportedAlgorithmType) ToString() string {
 	return "unsupported compression algorithm: " + e.Algorithm
 }
 
@@ -48,7 +48,7 @@ type GeneralDecompressor interface {
 }
 
 // NewCompressor creates a new Compressor based on the specified algorithm type, which is an int meant for the `Algorithms` array in `implemented.go`.
-func NewCompressor(algorithm int) (Compressor, error) { // Factory function for compressors
+func NewCompressor(algorithm int) (Compressor, *ErrUnsupportedAlgorithmType) { // Factory function for compressors
 	switch algorithm {
 	case algorithms.RLEAlgorithm:
 		return algorithms.NewRLECompressor(), nil
@@ -58,7 +58,7 @@ func NewCompressor(algorithm int) (Compressor, error) { // Factory function for 
 }
 
 // NewDecompressor creates a new Decompressor based on the specified algorithm type, which is an int meant for the `Algorithms` array in `implemented.go`.
-func NewDecompressor(algorithm int) (Decompressor, error) { // Factory function for decompressors
+func NewDecompressor(algorithm int) (Decompressor, *ErrUnsupportedAlgorithmType) { // Factory function for decompressors
 	switch algorithm {
 	case algorithms.RLEAlgorithm:
 		return algorithms.NewRLEDecompressor(), nil
@@ -68,7 +68,7 @@ func NewDecompressor(algorithm int) (Decompressor, error) { // Factory function 
 }
 
 // NewFileToFileCompressor creates a new FileToFileCompressor based on the specified algorithm type, which is an int meant for the `Algorithms` array in `implemented.go`.
-func NewFileToFileCompressor(algorithm int) (FileToFileCompressor, error) { // Factory function for file-to-file compressors
+func NewFileToFileCompressor(algorithm int) (FileToFileCompressor, *ErrUnsupportedAlgorithmType) { // Factory function for file-to-file compressors
 	switch algorithm {
 	case algorithms.RLEAlgorithm:
 		return algorithms.NewRLEFileToFileCompressor(), nil
@@ -78,7 +78,7 @@ func NewFileToFileCompressor(algorithm int) (FileToFileCompressor, error) { // F
 }
 
 // NewFileToFileDecompressor creates a new FileToFileDecompressor based on the specified algorithm type, which is an int meant for the `Algorithms` array in `implemented.go`.
-func NewFileToFileDecompressor(algorithm int) (FileToFileDecompressor, error) { // Factory function for file-to-file decompressors
+func NewFileToFileDecompressor(algorithm int) (FileToFileDecompressor, *ErrUnsupportedAlgorithmType) { // Factory function for file-to-file decompressors
 	switch algorithm {
 	case algorithms.RLEAlgorithm:
 		return algorithms.NewRLEFileToFileDecompressor(), nil
