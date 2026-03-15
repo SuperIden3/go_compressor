@@ -52,7 +52,7 @@ func TestRle(t *testing.T) {
 	// 2. Run the tests
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := RleAsString(tt.input)
+			got, err := RleEncodeAsString(tt.input)
 
 			// Check for unexpected errors
 			if err != nil {
