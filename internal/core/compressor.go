@@ -10,6 +10,10 @@ type ErrUnsupportedAlgorithmType struct {
 	Algorithm string // Name of the unsupported algorithm
 }
 
+func (e *ErrUnsupportedAlgorithmType) Error() string {
+	return e.ToString()
+}
+
 // Format the ErrUnsupportedAlgorithmType error message.
 func (e *ErrUnsupportedAlgorithmType) ToString() string {
 	return "unsupported compression algorithm: " + e.Algorithm
