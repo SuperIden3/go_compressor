@@ -124,7 +124,7 @@ func quietify(makeQuiet bool) {
 func main() {
 	// Parse command-line arguments
 	print_algs := flag.Bool("print-algorithms", false, "Print available compression algorithms and exit")
-	alg := flag.String("algorithm", "rle", "Compression algorithm to use (default: rle)")
+	alg := flag.String("algorithm", "rle", "Compression algorithm to use")
 	decompress := flag.Bool("decompress", false, "Decompress the input file instead of compressing it")
 	verbose := flag.Bool("verbose", false, "Enable verbose logging")
 	quiet := flag.Bool("quiet", false, "Disable logging (overrides verbose)")

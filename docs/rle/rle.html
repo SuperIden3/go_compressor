@@ -8,12 +8,30 @@
 			content="width=device-width, initial-scale=1.0, user-scalable=yes"
 		/>
 		<title>Run-Length Encryption</title>
-		<link rel="stylesheet" type="text/css" href="../.attachments/pandoc.css">
+		<link rel="stylesheet" type="text/css" href="../resources/rle.css">
+		<script defer src="../resources/rle.js"></script>
 	</head>
 	<body>
-		<!-- <header id="title-block-header">
-			<h1 class="title">Run-Length Encryption</h1>
-		</header> -->
+		<header id="title-block-header">
+			<table border="1" class="center">
+				<tr>
+					<td>DATE</td>
+					<td>Mon Apr 20 2026 GMT-0400 (Eastern Daylight Time)</td>
+				</tr>
+				<tr>
+					<td>REPOSITORY</td>
+					<td><a href="https://github.com/SuperIden3/go_compressor.git">Go Compressor</a></td>
+				</tr>
+				<tr>
+					<td>AUTHORS</td>
+					<td>
+						<ul>
+							<li>Iden Gomes</li>
+						</ul>
+					</td>
+				</tr>
+			</table>
+		</header>
 
 		<main>	
 			<h1 id="rle___run_length_encoding">RLE - Run Length Encoding</h1>
@@ -73,7 +91,7 @@
 				a wider range of values while also being shorter.
 			</p>
 
-			<h3 id="managing-overflow">Managing Overflow</h3>
+			<h3 id="managing_overflow">Managing Overflow</h3>
 
 			<p>
 				In this implementation, because the maximum value is <code>255</code> for
@@ -123,27 +141,39 @@
 
 			<h3 id="limitations">Limitations</h3>
 
-			<h4 id="input_output">Input &amp; Output</h4>
+			<ul>
+				<li>
+					<h4 id="input_output">Input &amp; Output</h4>
 
-			<p>
-				RLE is great for files that have continuous sequences of the same value,
-				but absolutely sucks at random data.
-				In the worst case, RLE will double the size of the input.
-			</p>
+					<p>
+						RLE is great for files that have continuous sequences of the same value,
+						but absolutely sucks at random data.
+						In the worst case, RLE will double the size of the input.
+					</p>
 
-			<blockquote>
-				<p>
-					Take <code>"ABABABAB"</code>. It will return
-					<code
-						>"&lt;SOH&gt;A&lt;SOH&gt;B&lt;SOH&gt;A&lt;SOH&gt;B&lt;SOH&gt;A&lt;SOH&gt;B&lt;SOH&gt;A&lt;SOH&gt;B"</code
-					>. This output doubles the size of the input.
-				</p>
-			</blockquote>
+					<blockquote>
+						<p>
+							Take <code>"ABABABAB"</code>. It will return
+							<code
+								>"&lt;SOH&gt;A&lt;SOH&gt;B&lt;SOH&gt;A&lt;SOH&gt;B&lt;SOH&gt;A&lt;SOH&gt;B&lt;SOH&gt;A&lt;SOH&gt;B"</code
+							>. This output doubles the size of the input.
+						</p>
+					</blockquote>
 
-			<p>
-				This makes RLE a rare choice for data compression, but it is still useful
-				for files that are mostly continuous sequences of the same value.
-			</p>
+					<p>
+						This makes RLE a rare choice for data compression, but it is still useful
+						for files that are mostly continuous sequences of the same value.
+					</p>
+				</li>
+			</ul>
 		</main>
+
+		<div>
+			<h2 id="diagram_section">Diagram</h2>
+
+			<img id="diagram" src="../resources/rle_encoding-diagram.webp" />
+			<br/>
+			<input type="button" id="open_diagram_button" value="Open Diagram" />
+		</div>
 	</body>
 </html>
